@@ -63,5 +63,3 @@
 (global-set-key "\C-x\C-b" 'ibuffer)
 (global-set-key "\C-cc" 'compile)
 (global-set-key "\C-c." 'find-file-around-point)
-
-;;add paredit mode to emacs-mode

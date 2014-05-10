@@ -1,5 +1,3 @@
-(add-to-list 'load-path (concat my-config-path "/" "thirdparty"))
-
 (autoload 'paredit-mode "paredit"
   "Minor mode for pseudo-structurally editing Lisp code"
   t)
@@ -10,7 +8,8 @@
 	  (lambda ()
 	    (paredit-mode 1)
 	    (highlight-parentheses-mode 1)))
-;; 该文件的代码基本拷贝自王垠的博客"scheme编程环境的设置"
+
+;; 以下代码基本拷贝自王垠的博客"scheme编程环境的设置"
 ;; 详情可参考"http://www.yinwang.org/blog-cn/2013/04/11/scheme-setup/"
 
 ;; scheme mode
