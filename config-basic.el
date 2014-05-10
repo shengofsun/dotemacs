@@ -15,7 +15,6 @@
 (setq ring-bell-function 'ignore) ; close ringbell warning of emacs
 
 (setq frame-title-format "minsky-pc@%b") ;; title in one frame
-(setq default-directory "/media/E/workspace") ;;default working directory
 (setq inhibit-startup-message t) ;;close emacs init window
 (setq gnus-inhibit-startup-message t) ;;close gnu init window
 (setq-default kill-whole-line t) ;;When using 'Ctrl-k', kill whole line 
@@ -37,9 +36,9 @@
 			(awk-mode . "awk")
 			(other . "stroustrup")))
 (defun my-c-mode-common-hook()
-  (setq indent-tabs-mode t
-        c-basic-offset 8
-        tab-width 8))
+  (setq indent-tabs-mode nil
+        c-basic-offset 4
+        tab-width 4))
 (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
 
 ; dired
@@ -52,6 +51,17 @@
 	  (lambda ()
 	    (dired-omit-mode 1)))
 
+;;find the file which name is around the point.
+(defun find-file-around-point()
+  (interactive)
+  (let ((filename (current-word t)))
+    (if (file-exists-p filename)
+	(find-file filename)
+      (message "File not exist!"))))
+
 ;;key binding
 (global-set-key "\C-x\C-b" 'ibuffer)
 (global-set-key "\C-cc" 'compile)
+(global-set-key "\C-c." 'find-file-around-point)
+
+;;add paredit mode to emacs-mode

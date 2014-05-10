@@ -1,15 +1,21 @@
 (add-to-list 'load-path (concat my-config-path "/" "thirdparty"))
 
-;; 该文件的代码基本拷贝自王垠的博客"scheme编程环境的设置"
-;; 详情可参考"http://www.yinwang.org/blog-cn/2013/04/11/scheme-setup/"
 (autoload 'paredit-mode "paredit"
   "Minor mode for pseudo-structurally editing Lisp code"
   t)
 (require 'highlight-parentheses)
 
+;; emacs-mode
+(add-hook 'emacs-lisp-mode-hook
+	  (lambda ()
+	    (paredit-mode 1)
+	    (highlight-parentheses-mode 1)))
+;; 该文件的代码基本拷贝自王垠的博客"scheme编程环境的设置"
+;; 详情可参考"http://www.yinwang.org/blog-cn/2013/04/11/scheme-setup/"
+
 ;; scheme mode
 (require 'cmuscheme)
-(setq scheme-program-name "guile")
+(setq scheme-program-name "D:/Software/Scheme48/scheme48.bat")
 
 (defun scheme-proc ()
   "Return the current Scheme process, starting one if necessary."
