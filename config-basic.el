@@ -1,6 +1,5 @@
 ;; basic settings
 (custom-set-variables
- '(custom-enabled-themes (quote (deeper-blue)))
  '(tool-bar-mode nil)
  '(scroll-bar-mode nil))
 
@@ -63,3 +62,12 @@
 (global-set-key "\C-x\C-b" 'ibuffer)
 (global-set-key "\C-cc" 'compile)
 (global-set-key "\C-c." 'find-file-around-point)
+
+;; color-theme
+(add-to-list 'load-path (concat my-config-path "/thirdparty/color-theme"))
+(require 'color-theme)
+
+(if window-system
+    (load-file "deepblue-color-theme.el")
+  (load-file "hobor-color-theme.el"))
+(my-color-theme)
