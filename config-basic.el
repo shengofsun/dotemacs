@@ -68,6 +68,6 @@
 (require 'color-theme)
 
 (if window-system
-    (load-file "deepblue-color-theme.el")
-  (load-file "hobor-color-theme.el"))
+    (load "deepblue-color-theme.el")
+  (load "hobor-color-theme.el"))
 (my-color-theme)
