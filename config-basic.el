@@ -22,7 +22,7 @@
 (setq ediff-split-window-function 'split-window-horizontally)
 
 ;; font setting, including English fonts and Chinese Fonts
-(set-frame-font "Monaco-11")
+(set-frame-font "Monaco-13")
 (if window-system
     (dolist (charset '(kana han symbol cjk-misc bopomofo))
       (set-fontset-font (frame-parameter nil 'font)

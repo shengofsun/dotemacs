@@ -4,6 +4,6 @@
 		"config-basic.el"
 		"config-lisp.el"
 		"config-autocomplete.el"
-		"config-markdown.el")))
+		"config-major-modes.el")))
   (dolist (package-file package)
     (load package-file)))
