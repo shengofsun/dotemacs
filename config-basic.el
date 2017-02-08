@@ -30,7 +30,10 @@
 			(font-spec :family "Microsoft Yahei" :size 15)))
   nil)
 
-; conding indents
+;; conding indents
+(setq-default indent-tabs-mode nil)
+(setq-default tab-width 4)
+
 (setq c-default-style '((java-mode . "java")
 			(awk-mode . "awk")
 			(other . "stroustrup")))
@@ -39,6 +42,10 @@
         c-basic-offset 4
         tab-width 4))
 (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
+
+(defun my-sh-mode-hook()
+  (setq sh-basic-offset 4))
+(add-hook 'sh-mode-hook 'my-sh-mode-hook)
 
 ; dired
 (add-hook 'dired-load-hook
@@ -68,6 +75,6 @@
 (require 'color-theme)
 
 (if window-system
-    (load "deepblue-color-theme.el")
-  (load "hobor-color-theme.el"))
-(my-color-theme)
+    nil
+  (load "hobor-color-theme.el")
+  (my-color-theme))
