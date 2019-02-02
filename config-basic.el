@@ -22,7 +22,7 @@
 (setq ediff-split-window-function 'split-window-horizontally)
 
 ;; font setting, including English fonts and Chinese Fonts
-(set-frame-font "Monaco-13")
+(set-frame-font "Monaco-14")
 (if window-system
     (dolist (charset '(kana han symbol cjk-misc bopomofo))
       (set-fontset-font (frame-parameter nil 'font)
@@ -34,14 +34,8 @@
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
 
-(setq c-default-style '((java-mode . "java")
-			(awk-mode . "awk")
-			(other . "stroustrup")))
-(defun my-c-mode-common-hook()
-  (setq indent-tabs-mode nil
-        c-basic-offset 4
-        tab-width 4))
-(add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
+(load "google-c-style.el")
+(add-hook 'c-mode-common-hook 'google-set-c-style)
 
 (defun my-sh-mode-hook()
   (setq sh-basic-offset 4))
@@ -62,19 +56,96 @@
   (interactive)
   (let ((filename (current-word t)))
     (if (file-exists-p filename)
-	(find-file filename)
+        (find-file filename)
       (message "File not exist!"))))
+(global-set-key "\C-c." 'find-file-around-point)
+
+;; file name handle for c++
+(defun reverse-ext (ext)
+  (cond ((string= ext ".h") ".cc")
+        ((string= ext ".cc") ".h")
+        (t nil)))
+
+(defun last-char (str char)
+  (defun last-char-inner (pos)
+    (if (< pos 0)
+        pos
+      (if (= (elt str pos) char)
+          pos
+        (last-char-inner (- pos 1)))))
+  (last-char-inner (- (length str) 1)))
+
+(defun filename-non-ext (filename)
+  (let ((pos (last-char filename ?.)))
+    (if (< pos 0)
+        filename
+      (substring filename 0 pos))))
+
+(defun filename-ext (filename)
+  (let ((pos (last-char filename ?.)))
+    (if (< pos 0)
+        nil
+      (substring filename pos))))
+
+;; xxx.h->xxx.cc or xxx.cc->xxx.h, must be at same directory
+(defun get-related-filename (filename)
+  (let ((pos (last-char filename ?.)))
+    (if (= pos -1)
+        nil
+      (concat (substring filename 0 pos) (reverse-ext (substring filename pos))))))
+
+(defun go-related-file ()
+  (interactive)
+  (let* ((dir-part (file-name-directory buffer-file-name))
+         (base-part (file-name-nondirectory buffer-file-name))
+         (rev (get-related-filename base-part))
+         (rev-fullpath (concat dir-part "/" rev)))
+    (if (file-exists-p rev-fullpath)
+        (find-file rev-fullpath)
+      (message (concat "File not exist!: " rev-fullpath)))))
+(global-set-key "\C-cr" 'go-related-file)
+
+;; xxx_test.cc->xxx.cc, or xxx.h/xxx.cc->xxx_test.cc, must be at same directory
+(defun get-test-related-filename (filename)
+  (defun test-file? (name)
+    (and (> (length name) 5)
+         (string= (substring name -5 nil)
+                  "_test")))
+  (let ((non-ext (filename-non-ext filename)))
+    (if (test-file? non-ext)
+        (concat (substring non-ext 0 -5) ".cc")
+      (concat non-ext "_test.cc"))))
+
+(defun go-test-related-file ()
+  (interactive)
+  (let* ((dir-part (file-name-directory buffer-file-name))
+         (base-part (file-name-nondirectory buffer-file-name))
+         (related-test (get-test-related-filename base-part))
+         (r-fullpath (concat dir-part "/" related-test)))
+    (if (file-exists-p r-fullpath)
+        (find-file r-fullpath)
+      (message (concat "File not exist!: " r-fullpath)))))
+(global-set-key "\C-ct" 'go-test-related-file)
+
+(global-linum-mode)
 
 ;;key binding
 (global-set-key "\C-x\C-b" 'ibuffer)
 (global-set-key "\C-cc" 'compile)
-(global-set-key "\C-c." 'find-file-around-point)
+(global-set-key "\C-cp" 'replace-string)
+(global-set-key "\C-cq" 'query-replace)
+(global-set-key "\C-cg" 'goto-line)
+
+;; visit tags
+(global-set-key "\M-*" 'pop-tag-mark)
 
 ;; color-theme
 (add-to-list 'load-path (concat my-config-path "/thirdparty/color-theme"))
 (require 'color-theme)
+(load "classical-color-theme.el")
+(my-color-theme)
 
-(if window-system
-    nil
-  (load "hobor-color-theme.el")
-  (my-color-theme))
+;; neo-tree
+(add-to-list 'load-path (concat my-config-path "/thirdparty/neotree"))
+(require 'neotree)
+(global-set-key [f8] 'neotree-toggle)

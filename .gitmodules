@@ -1,3 +1,6 @@
 [submodule "thirdparty/go-mode"]
 	path = thirdparty/go-mode
 	url = https://github.com/dominikh/go-mode.el.git
+[submodule "thirdparty/neotree"]
+	path = thirdparty/neotree
+	url = https://github.com/jaypei/emacs-neotree.git
