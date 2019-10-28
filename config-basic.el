@@ -16,7 +16,8 @@
 (setq frame-title-format "minsky-pc@%b") ;; title in one frame
 (setq inhibit-startup-message t) ;;close emacs init window
 (setq gnus-inhibit-startup-message t) ;;close gnu init window
-(setq-default kill-whole-line t) ;;When using 'Ctrl-k', kill whole line 
+(setq-default kill-whole-line t) ;;When using 'Ctrl-k', kill whole line
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 ;; ediff setting
 (setq ediff-split-window-function 'split-window-horizontally)
@@ -127,6 +128,7 @@
       (message (concat "File not exist!: " r-fullpath)))))
 (global-set-key "\C-ct" 'go-test-related-file)
 
+(setq linum-format "%4d \u2502 ")
 (global-linum-mode)
 
 ;;key binding
@@ -142,10 +144,33 @@
 ;; color-theme
 (add-to-list 'load-path (concat my-config-path "/thirdparty/color-theme"))
 (require 'color-theme)
-(load "classical-color-theme.el")
+(load "hobor-color-theme.el")
 (my-color-theme)
 
-;; neo-tree
 (add-to-list 'load-path (concat my-config-path "/thirdparty/neotree"))
 (require 'neotree)
 (global-set-key [f8] 'neotree-toggle)
+
+;; lua-mode
+(add-to-list 'load-path "~/source/lua-mode")
+(autoload 'lua-mode "lua-mode" "Lua editing mode." t)
+(add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
+(add-to-list 'interpreter-mode-alist '("lua" . lua-mode))
+
+;; el-get mode
+(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
+
+(unless (require 'el-get nil 'noerror)
+  (with-current-buffer
+      (url-retrieve-synchronously
+       "https://raw.githubusercontent.com/dimitri/el-get/master/el-get-install.el")
+    (goto-char (point-max))
+    (eval-print-last-sexp)))
+
+(add-to-list 'el-get-recipe-path "~/.emacs.d/el-get-user/recipes")
+(el-get 'sync)
+
+;; jedi mode
+(setq exec-path (append exec-path '("/usr/local/bin")))
+(add-hook 'python-mode-hook 'jedi:setup)
+(setq jedi:complete-on-dot t)

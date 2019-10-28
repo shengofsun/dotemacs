@@ -9,6 +9,10 @@
 (autoload 'rust-mode "rust-mode" nil t)
 (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode))
 
+;; cmake mode
+(autoload 'cmake-mode "cmake-mode" nil t)
+(add-to-list 'auto-mode-alist '("CMakeLists\\.txt\\'" . cmake-mode))
+
 ;; go mode
 (add-to-list 'load-path (concat my-config-path "/" "thirdparty/go-mode"))
 (autoload 'go-mode "go-mode" nil t)
