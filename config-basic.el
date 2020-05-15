@@ -128,7 +128,9 @@
       (message (concat "File not exist!: " r-fullpath)))))
 (global-set-key "\C-ct" 'go-test-related-file)
 
-(setq linum-format "%4d \u2502 ")
+(if window-system
+    nil
+  (setq linum-format "%4d \u2502 "))
 (global-linum-mode)
 
 ;;key binding
@@ -144,8 +146,9 @@
 ;; color-theme
 (add-to-list 'load-path (concat my-config-path "/thirdparty/color-theme"))
 (require 'color-theme)
-(load "hobor-color-theme.el")
-(my-color-theme)
+(when window-system
+  (load "classical-color-theme.el")
+  (my-color-theme))
 
 (add-to-list 'load-path (concat my-config-path "/thirdparty/neotree"))
 (require 'neotree)
